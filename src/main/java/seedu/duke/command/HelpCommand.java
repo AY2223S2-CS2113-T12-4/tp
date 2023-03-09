@@ -16,10 +16,10 @@ public class HelpCommand extends Command {
     private static final String COMMAND_DETAILED_DESCRIPTION = "";
     private static final String NO_FEATURE_KEYWORD = "";
 
-    public HelpCommand(HashMap<String, String> arguments) throws Exception {
+    public HelpCommand(HashMap<String, String> arguments) throws BadCommandException {
         super(arguments);
         if (!HelpCommand.isValidCommand(arguments)) {
-            throw new Exception(String.format(HelpCommand.BAD_COMMAND_MESSAGE,
+            throw new BadCommandException(String.format(HelpCommand.BAD_COMMAND_MESSAGE,
                     HelpCommand.COMMAND_KEYWORD));
         }
     }
