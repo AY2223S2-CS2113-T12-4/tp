@@ -8,7 +8,10 @@ import java.util.Map;
  *
  * Each Command is initialised with the arguments issued
  *   by the user. Execute the specified Command by calling
- *   execute().
+ *   execute().<br>
+ *
+ * Child classes must provide the static isValidCommand() method for checking whether a set of
+ *   arguments are valid for a given command.
  */
 public abstract class Command {
     // Command is abstract, it has no command keyword of its own
