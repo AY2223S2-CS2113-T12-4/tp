@@ -29,6 +29,10 @@ public class ReturnCommand extends Command {
         assert argumentPayload.size() > EMPTY_ARGUMENT_PAYLOAD : EMPTY_ARGUMENT_PAYLOAD_ASSERTION;
     }
 
+    public static boolean isReturn(Command command) {
+        return command instanceof ReturnCommand;
+    }
+
     /**
      * Get the command itself.
      *
@@ -83,7 +87,6 @@ public class ReturnCommand extends Command {
         }
         assert argumentPayload.containsKey(COMMAND_KEYWORD) : COMMAND_KEYWORD_ASSERTION;
         assert argumentPayload.get(COMMAND_KEYWORD).equals(PAYLOAD) : COMMAND_PAYLOAD_ASSERTION;
-        ReflectionManager.setIsExit(true);
     }
 
     /**

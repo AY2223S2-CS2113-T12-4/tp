@@ -7,23 +7,6 @@ import java.util.ArrayList;
  * Including pre-defined questions and greeting messages.
  */
 public class SelfReflection {
-    private static final String LOGO =
-            "  _____ ______ _      ______   _____  ______ ______ _      ______ _____ _______ _____ ____  _   _ \n"
-                    + " / ____|  ____| |    |  ____| |  __ \\|  ____|  ____| "
-                    + "|    |  ____/ ____|__   __|_   _/ __ \\| \\ | |\n"
-                    + "| (___ | |__  | |    | |__    | |__) | |__  | |__  | "
-                    + "|    | |__ | |       | |    | || |  | |  \\| |\n"
-                    + " \\___ \\|  __| | |    |  __|   |  _  /|  __| |  __| "
-                    + "| |    |  __|| |       | |    | || |  | | . ` |\n"
-                    + " ____) | |____| |____| |      | | \\ \\| |____| |    "
-                    + "| |____| |___| |____   | |   _| || |__| | |\\  |\n"
-                    + "|_____/|______|______|_|      |_|  \\_\\______|_|    "
-                    + "|______|______\\_____|  |_|  "
-                    + "|_____\\____/|_| \\_|\n";
-    private static final String GREETING_MESSAGE = "Welcome to WellNUS++ Self Reflection section :D"
-            + System.lineSeparator() + "Feel very occupied and cannot find time to self reflect?"
-            + System.lineSeparator() + "No worries, this section will give you the opportunity to reflect "
-            + "and improve on yourself!!";
 
     // Questions are adopted from website: https://www.usa.edu/blog/self-discovery-questions/
     private static final String[] QUESTIONS = {
@@ -42,43 +25,45 @@ public class SelfReflection {
     // TODO: To be changed/updated at later stages
     private static final int TOTAL_NUM_QUESTIONS = 10;
     private static final String TOTAL_NUM_QUESTION_ASSERTIONS = "The total number of questions is 10.";
-    private static final ReflectUi UI = new ReflectUi();
+    private final ReflectUi reflectUi = new ReflectUi();
 
-    private static ArrayList<ReflectionQuestion> questions = new ArrayList<>();
+    private ArrayList<ReflectionQuestion> savedQuestions;
 
     public SelfReflection() {
-        setUpQuestions();
-        assert questions.size() == TOTAL_NUM_QUESTIONS : TOTAL_NUM_QUESTION_ASSERTIONS;
+        this.savedQuestions = generateQuestions();
+        assert savedQuestions.size() == TOTAL_NUM_QUESTIONS : TOTAL_NUM_QUESTION_ASSERTIONS;
     }
 
     /**
      * Load the questions list with pre-defined reflect questions.
      */
-    private static void setUpQuestions() {
+    private ArrayList<ReflectionQuestion> generateQuestions() {
+        ArrayList<ReflectionQuestion> questions = new ArrayList<>();
         for (int i = 0; i < QUESTIONS.length; i += 1) {
             ReflectionQuestion newQuestion = new ReflectionQuestion(QUESTIONS[i]);
-            addReflectQuestion(newQuestion);
+            questions.add(newQuestion);
         }
-    }
-
-    /**
-     * Print greeting logo and message.
-     */
-    public static void greet() {
-        UI.printLogoWithSeparator(LOGO);
-        UI.printOutputMessage(GREETING_MESSAGE);
-    }
-
-    public static ArrayList<ReflectionQuestion> getQuestions() {
         return questions;
     }
 
-    public static void clearQuestions() {
-        questions.clear();
+    private ReflectUi getReflectUi() {
+        return this.reflectUi;
     }
 
-    public static void addReflectQuestion(ReflectionQuestion question) {
-        questions.add(question);
+    private ArrayList<ReflectionQuestion> getSavedQuestions() {
+        return this.savedQuestions;
+    }
+
+    public void addReflectQuestion(ReflectionQuestion question) {
+        this.getSavedQuestions().add(question);
+    }
+
+    public void clearQuestions() {
+        this.getSavedQuestions().clear();
+    }
+
+    public ArrayList<ReflectionQuestion> getQuestions() {
+        return this.savedQuestions;
     }
 }
 

@@ -1,12 +1,32 @@
 package wellnus.reflection;
 
+import wellnus.command.Command;
 import wellnus.exception.BadCommandException;
+import wellnus.exception.WellNusException;
 import wellnus.manager.Manager;
 
 import java.util.HashMap;
 import java.util.NoSuchElementException;
 
 public class ReflectionManager extends Manager {
+    private static final String LOGO =
+            "  _____ ______ _      ______   _____  ______ ______ _      ______ _____ _______ _____ ____  _   _ \n"
+                    + " / ____|  ____| |    |  ____| |  __ \\|  ____|  ____| "
+                    + "|    |  ____/ ____|__   __|_   _/ __ \\| \\ | |\n"
+                    + "| (___ | |__  | |    | |__    | |__) | |__  | |__  | "
+                    + "|    | |__ | |       | |    | || |  | |  \\| |\n"
+                    + " \\___ \\|  __| | |    |  __|   |  _  /|  __| |  __| "
+                    + "| |    |  __|| |       | |    | || |  | | . ` |\n"
+                    + " ____) | |____| |____| |      | | \\ \\| |____| |    "
+                    + "| |____| |___| |____   | |   _| || |__| | |\\  |\n"
+                    + "|_____/|______|______|_|      |_|  \\_\\______|_|    "
+                    + "|______|______\\_____|  |_|  "
+                    + "|_____\\____/|_| \\_|\n";
+    private static final String GREETING_MESSAGE = "Welcome to WellNUS++ Self Reflection section :D"
+            + System.lineSeparator() + "Feel very occupied and cannot find time to self reflect?"
+            + System.lineSeparator() + "No worries, this section will give you the opportunity to reflect "
+            + "and improve on yourself!!";
+    private static final String GOODBYE_MESSAGE = "Sending you back to the main session...";
     private static final String FEATURE_NAME = "reflect";
     private static final String BRIEF_DESCRIPTION = "Users can get a random set of questions to reflect on.";
     private static final String FULL_DESCRIPTION = "";
@@ -28,32 +48,28 @@ public class ReflectionManager extends Manager {
     private static final String SUPPORTED_COMMANDS_ASSERTION = "The number of supported commands should be 3";
     private static final String ARGUMENT_PAYLOAD_ASSERTION = "Argument-payload pairs cannot be empty";
     private static final boolean INITIAL_EXIT_STATUS = false;
-    private static final ReflectUi UI = new ReflectUi();
-
-    // This attribute should be set as static to avoid confusion if a new object is created.
-    private static boolean isExit;
+    private final ReflectUi UI = new ReflectUi();
     private String commandType;
     private HashMap<String, String> argumentPayload;
 
     public ReflectionManager() {
-        setIsExit(INITIAL_EXIT_STATUS);
         setSupportedCommands();
     }
 
-    public HashMap<String, String> getArgumentPayload() {
-        return argumentPayload;
+    private ReflectUi getReflectUi() {
+        return this.UI;
     }
 
-    public String getCommandType() {
-        return commandType;
+    /**
+     * Print greeting logo and message.
+     */
+    private void greet() {
+        this.getReflectUi().printLogoWithSeparator(LOGO);
+        this.getReflectUi().printOutputMessage(GREETING_MESSAGE);
     }
 
-    public static void setIsExit(boolean status) {
-        isExit = status;
-    }
-
-    public static boolean getIsExit() {
-        return isExit;
+    private void goodbye() {
+        this.getReflectUi().printOutputMessage(ReflectionManager.GOODBYE_MESSAGE);
     }
 
     /**
@@ -115,50 +131,27 @@ public class ReflectionManager extends Manager {
     }
 
     /**
-     * Set command argument and payload pairs from user inputs.<br/>
-     * This is to be used to generate command.
-     *
-     * @param inputCommand Read from user input
-     * @throws BadCommandException If an invalid command was given
-     */
-    public void setArgumentPayload(String inputCommand) throws BadCommandException {
-        argumentPayload = commandParser.parseUserInput(inputCommand);
-        assert !argumentPayload.isEmpty() : ARGUMENT_PAYLOAD_ASSERTION;
-    }
-
-    /**
-     * Set the main command type to determine which command to create.
-     *
-     * @param inputCommand Read from user input
-     * @throws BadCommandException If an invalid command was given
-     */
-    public void setCommandType(String inputCommand) throws BadCommandException {
-        String mainArgument = commandParser.getMainArgument(inputCommand);
-        commandType = mainArgument;
-        assert commandType.length() > EMPTY_COMMAND_TYPE : COMMAND_TYPE_ASSERTION;
-    }
-
-    /**
      * Main entry point of self reflection section.<br/>
      * <br/>
      * It prints out greeting messages, listen to and execute user commands.
      */
     @Override
     public void runEventDriver() {
-        setIsExit(false);
-        SelfReflection.greet();
+        this.greet();
+        boolean isExit = INITIAL_EXIT_STATUS;
         while (!isExit) {
             try {
                 String inputCommand = UI.getCommand();
-                setCommandType(inputCommand);
-                setArgumentPayload(inputCommand);
-                executeCommands();
+                Command command = getCommandFor(inputCommand);
+                command.execute();
+                isExit = ReturnCommand.isReturn(command);
             } catch (NoSuchElementException noSuchElement) {
                 UI.printErrorFor(noSuchElement, NO_ELEMENT_MESSAGE);
-            } catch (BadCommandException badCommand) {
-                UI.printErrorFor(badCommand, INVALID_COMMAND_MESSAGE);
+            } catch (WellNusException exception) {
+                UI.printErrorFor(exception, INVALID_COMMAND_MESSAGE);
             }
         }
+        this.goodbye();
     }
 
     /**
@@ -168,25 +161,21 @@ public class ReflectionManager extends Manager {
      * <li>Get a random set of reflection questions<br/>
      * <li>Return back main interface<br/>
      * <li>Exit program<br/>
-     *
-     * @throws BadCommandException If an invalid command was given
+     * @param userCommand Full command issued by the user
+     * @return Command that can handle the user's command
+     * @throws BadCommandException If an unrecognised command was given
      */
-    public void executeCommands() throws BadCommandException {
+    public Command getCommandFor(String userCommand) throws BadCommandException {
+        String commandType = commandParser.getMainArgument(userCommand);
+        HashMap<String, String> arguments = commandParser.parseUserInput(userCommand);
         assert commandType.length() > EMPTY_COMMAND_TYPE : COMMAND_TYPE_ASSERTION;
         switch (commandType) {
         case GET_COMMAND:
-            GetCommand getQuestionsCmd = new GetCommand(argumentPayload);
-            getQuestionsCmd.execute();
-            break;
+            return new GetCommand(arguments);
         case RETURN_MAIN:
-            ReturnCommand returnCmd = new ReturnCommand(argumentPayload);
-            returnCmd.execute();
-            assert isExit : IS_EXIT_ASSERTION;
-            break;
+            return new ReturnCommand(arguments);
         case EXIT_COMMAND:
-            ExitCommand exitCmd = new ExitCommand(argumentPayload);
-            exitCmd.execute();
-            break;
+            return new ExitCommand(arguments);
         default:
             throw new BadCommandException(INVALID_COMMAND_MESSAGE);
         }

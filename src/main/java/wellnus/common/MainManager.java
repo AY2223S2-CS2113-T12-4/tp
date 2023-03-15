@@ -24,6 +24,8 @@ public class MainManager extends Manager {
     private static final String INVALID_COMMAND_MESSAGE = "Don't recognise that command?";
     private static final String INVALID_COMMAND_ADDITIONAL_MESSAGE = "Try 'help' for some guidance";
     private static final String INVALID_FEATURE_KEYWORD_MESSAGE = "Feature keyword can't be empty dear";
+    private static final String WELCOME_BACK_MESSAGE = "Welcome back to the main session! Type a feature to continue, "
+            + "or 'help' for some ideas";
     private static final String WELLNUS_FEATURE_NAME = "";
     private ArrayList<Manager> featureManagers;
     private final TextUi textUi;
@@ -72,13 +74,16 @@ public class MainManager extends Manager {
                     // TODO: Consider if there's a way to avoid this extra try-catch?
                     try {
                         manager.runEventDriver();
+                        this.getTextUi().printOutputMessage(MainManager.WELCOME_BACK_MESSAGE);
                     } catch (BadCommandException badCommandException) {
                         this.getTextUi().printErrorFor(badCommandException, NO_ADDITIONAL_MESSAGE);
                     }
                 });
-                Command mainCommand = this.getMainCommandFor(nextCommand);
-                mainCommand.execute();
-                isExit = ExitCommand.isExit(mainCommand);
+                if (featureManager.isEmpty()) {
+                    Command mainCommand = this.getMainCommandFor(nextCommand);
+                    mainCommand.execute();
+                    isExit = ExitCommand.isExit(mainCommand);
+                }
             } catch (WellNusException exception) {
                 this.getTextUi().printErrorFor(exception, NO_ADDITIONAL_MESSAGE);
             }
