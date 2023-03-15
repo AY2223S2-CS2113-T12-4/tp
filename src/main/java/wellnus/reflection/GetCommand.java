@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 
 public class GetCommand extends Command {
     private static final int NUM_OF_RANDOM_QUESTIONS = 5;
-    private static final String FEATURE_NAME = "Self Reflection";
+    private static final String FEATURE_NAME = "reflect";
     private static final String COMMAND_KEYWORD = "get";
     private static final String FULL_DESCRIPTION = "";
     private static final String ARGUMENT = "get";

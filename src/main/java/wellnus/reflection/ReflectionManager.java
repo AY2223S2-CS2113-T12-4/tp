@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.NoSuchElementException;
 
 public class ReflectionManager extends Manager {
-    private static final String FEATURE_NAME = "Self Reflection";
+    private static final String FEATURE_NAME = "reflect";
     private static final String BRIEF_DESCRIPTION = "Users can get a random set of questions to reflect on.";
     private static final String FULL_DESCRIPTION = "";
     private static final String GET_COMMAND = "get";

@@ -6,6 +6,7 @@ import wellnus.command.ExitCommand;
 import wellnus.command.HelpCommand;
 import wellnus.exception.BadCommandException;
 import wellnus.manager.Manager;
+import wellnus.reflection.ReflectionManager;
 import wellnus.ui.TextUi;
 
 import java.util.ArrayList;
@@ -28,6 +29,7 @@ public class MainManager extends Manager {
     public MainManager() {
         this.featureManagers = new ArrayList<>();
         this.textUi = new TextUi();
+        this.setSupportedFeatureManagers();
     }
 
     private static String getBriefAppDescription() {
@@ -55,6 +57,7 @@ public class MainManager extends Manager {
             try {
                 String nextCommand = this.getTextUi().getCommand();
                 String featureKeyword = parser.getMainArgument(nextCommand);
+                System.out.println(featureKeyword);
                 Optional<Manager> featureManager = this.getManagerFor(featureKeyword);
                 if (featureManager.isEmpty() && !this.isSupportedCommand(featureKeyword)) {
                     BadCommandException badCommandException =
@@ -210,6 +213,7 @@ public class MainManager extends Manager {
     protected void setSupportedFeatureManagers() {
         // TODO: Implement once all Managers are in
         // e.g. super.getSupportedFeatureManagers().add(new AtomicHabitManager());
+        this.getSupportedFeatureManagers().add(new ReflectionManager());
     }
 
 }

@@ -6,7 +6,7 @@ import wellnus.exception.BadCommandException;
 import java.util.HashMap;
 
 public class ExitCommand extends Command {
-    private static final String FEATURE_NAME = "Self Reflection";
+    private static final String FEATURE_NAME = "reflect";
     private static final String COMMAND_KEYWORD = "exit";
     private static final String FULL_DESCRIPTION = "";
     private static final String ARGUMENT = "exit";
