@@ -62,7 +62,8 @@ public class CommandParser {
             throw new BadCommandException(ERROR_EMPTY_COMMAND);
         }
 
-        String[] rawCommands = fullCommandString.split(ARGUMENT_DELIMITER, -1);
+        int NO_LIMIT = -1;
+        String[] rawCommands = fullCommandString.split(ARGUMENT_DELIMITER, NO_LIMIT);
         // Adversarial user input check
         // There are 2 possible adversarial inputs that should be checked for
         // 1. Whitespace/Empty Arguments: `cmd payload -- payload1 -- `

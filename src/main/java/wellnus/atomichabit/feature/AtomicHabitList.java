@@ -3,7 +3,7 @@ package wellnus.atomichabit.feature;
 import java.util.ArrayList;
 
 public class AtomicHabitList {
-    private ArrayList<AtomicHabit> allAtomicHabits;
+    private final ArrayList<AtomicHabit> allAtomicHabits;
 
     public AtomicHabitList() {
         allAtomicHabits = new ArrayList<>();
@@ -12,7 +12,7 @@ public class AtomicHabitList {
     /**
      * Method to add atomicHabit to list containing all habits
      *
-     * @param atomicHabit
+     * @param atomicHabit New atomic habit to add into the list that this class manages
      */
 
     public void addAtomicHabit(AtomicHabit atomicHabit) {

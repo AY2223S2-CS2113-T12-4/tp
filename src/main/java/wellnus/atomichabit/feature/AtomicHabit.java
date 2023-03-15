@@ -1,7 +1,7 @@
 package wellnus.atomichabit.feature;
 
 public class AtomicHabit {
-    private String description;
+    private final String description;
     private int count;
 
     /**
@@ -9,7 +9,7 @@ public class AtomicHabit {
      * Will initialise private description to the input parameter
      * Assigns count to 1 when a new habit is added
      *
-     * @param description
+     * @param description Description of this new atomic habit provided by the user
      */
     public AtomicHabit(String description) {
         this.description = description;
