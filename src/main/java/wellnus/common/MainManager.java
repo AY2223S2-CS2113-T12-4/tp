@@ -60,7 +60,6 @@ public class MainManager extends Manager {
             try {
                 String nextCommand = this.getTextUi().getCommand();
                 String featureKeyword = parser.getMainArgument(nextCommand);
-                System.out.println(featureKeyword);
                 Optional<Manager> featureManager = this.getManagerFor(featureKeyword);
                 if (featureManager.isEmpty() && !this.isSupportedCommand(featureKeyword)) {
                     BadCommandException badCommandException =
