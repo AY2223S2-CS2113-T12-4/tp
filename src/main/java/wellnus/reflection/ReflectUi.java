@@ -2,6 +2,8 @@ package wellnus.reflection;
 
 import wellnus.ui.TextUi;
 
+import java.io.InputStream;
+
 /**
  * This section is to be updated with main UI class
  */
@@ -12,6 +14,12 @@ public class ReflectUi extends TextUi {
      * Call setSeparator() method inherited from TextUi superclass to re-define separator.
      */
     public ReflectUi() {
+        super();
+        setSeparator(SEPARATOR);
+    }
+
+    public ReflectUi(InputStream inputStream) {
+        super(inputStream);
         setSeparator(SEPARATOR);
     }
 
