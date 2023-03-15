@@ -48,11 +48,12 @@ public class ReflectionManager extends Manager {
     private static final String SUPPORTED_COMMANDS_ASSERTION = "The number of supported commands should be 3";
     private static final String ARGUMENT_PAYLOAD_ASSERTION = "Argument-payload pairs cannot be empty";
     private static final boolean INITIAL_EXIT_STATUS = false;
-    private final ReflectUi UI = new ReflectUi();
+    private final ReflectUi UI;
     private String commandType;
     private HashMap<String, String> argumentPayload;
 
     public ReflectionManager() {
+        this.UI = new ReflectUi();
         setSupportedCommands();
     }
 

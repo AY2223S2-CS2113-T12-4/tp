@@ -43,12 +43,11 @@ class SelfReflectionTest {
     // Test the correct number of questions are loaded into the list
     @Test
     void setUpQuestions_checkArrayLength_success() {
-        SelfReflection.clearQuestions();
-        ArrayList<ReflectionQuestion> questions = SelfReflection.getQuestions();
-        int emptyArrayLength = questions.size();
         SelfReflection selfReflection = new SelfReflection();
+        ArrayList<ReflectionQuestion> questions = selfReflection.getQuestions();
         int fullArrayLength = questions.size();
-        SelfReflection.clearQuestions();
+        selfReflection.clearQuestions();
+        int emptyArrayLength = questions.size();
         assertEquals(EMPTY_ARRAY_LENGTH, emptyArrayLength);
         assertEquals(FULL_ARRAY_LENGTH, fullArrayLength);
     }

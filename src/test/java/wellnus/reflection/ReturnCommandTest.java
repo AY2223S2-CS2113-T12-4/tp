@@ -1,48 +1,40 @@
 package wellnus.reflection;
 
 import org.junit.jupiter.api.Test;
+import wellnus.command.CommandParser;
 import wellnus.exception.BadCommandException;
 
 import java.util.HashMap;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 class ReturnCommandTest {
     private static final String RETURN_COMMAND = "return";
     private static final String RETURN_COMMAND_WRONG_FORMAT = "return back";
     private static final boolean IS_NOT_EXIT = false;
     private static final boolean IS_EXIT = true;
+    private final CommandParser commandParser;
+
+    public ReturnCommandTest() {
+        this.commandParser = new CommandParser();
+    }
 
     // Test whether ReturnCommand execute() method can terminate self reflection or not.
     @Test
-    void execute_checkIsExit_expectTrue() throws BadCommandException {
-        ReflectionManager reflectionManager = new ReflectionManager();
-        reflectionManager.setArgumentPayload(RETURN_COMMAND);
-        HashMap<String, String> returnArgumentPayload = reflectionManager.getArgumentPayload();
+    void execute_checkWillReturn_success() throws BadCommandException {
+        HashMap<String, String> returnArgumentPayload = commandParser.parseUserInput(RETURN_COMMAND);
         ReturnCommand returnCmd = new ReturnCommand(returnArgumentPayload);
-        returnCmd.execute();
-        assertEquals(IS_EXIT, reflectionManager.getIsExit());
-    }
-
-    // Test whether isExit is false for a new ReflectionManager object after exiting from previous one.
-    @Test
-    void execute_checkNewObjectIsExit_expectFalse() throws BadCommandException {
-        ReflectionManager reflectionManager = new ReflectionManager();
-        reflectionManager.setArgumentPayload(RETURN_COMMAND);
-        HashMap<String, String> returnArgumentPayload = reflectionManager.getArgumentPayload();
-        ReturnCommand returnCmd = new ReturnCommand(returnArgumentPayload);
-        returnCmd.execute();
-        ReflectionManager newReflectionManager = new ReflectionManager();
-        assertEquals(IS_NOT_EXIT, newReflectionManager.getIsExit());
+        try {
+            returnCmd.validateCommand(returnArgumentPayload);
+        } catch (BadCommandException badCommandException) {
+            fail();
+        }
     }
 
     // Test whether wrong format command exception is caught or not.
     @Test
     void execute_checkWrongCmdFormat_expectException() throws BadCommandException {
-        ReflectionManager reflectionManager = new ReflectionManager();
-        reflectionManager.setArgumentPayload(RETURN_COMMAND_WRONG_FORMAT);
-        HashMap<String, String> returnArgumentPayload = reflectionManager.getArgumentPayload();
+        HashMap<String, String> returnArgumentPayload = commandParser.parseUserInput(RETURN_COMMAND_WRONG_FORMAT);
         ReturnCommand returnCmd = new ReturnCommand(returnArgumentPayload);
         assertThrows(BadCommandException.class, () -> {
             returnCmd.validateCommand(returnArgumentPayload);

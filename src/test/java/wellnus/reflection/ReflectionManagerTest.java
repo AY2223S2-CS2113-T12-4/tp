@@ -4,6 +4,8 @@ import org.junit.jupiter.api.Test;
 import wellnus.command.Command;
 import wellnus.exception.BadCommandException;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -18,29 +20,20 @@ class ReflectionManagerTest {
 
     // Test whether exceptions are thrown for invalid command
     @Test
-    void execution_invalidCommand_expectException() throws BadCommandException {
+    void getCommandFor_invalidCommand_expectException() throws BadCommandException {
         ReflectionManager reflectionManager = new ReflectionManager();
-        reflectionManager.setCommandType(INVALID_COMMAND);
         assertThrows(BadCommandException.class,
-                reflectionManager::executeCommands);
+                () -> reflectionManager.getCommandFor(INVALID_COMMAND));
     }
 
     // Test whether exceptions are thrown for empty string for commandType.
     @Test
-    void setCommandType_emptyString_expectException() {
+    void getCommandFor_emptyString_expectException() {
         ReflectionManager reflectionManager = new ReflectionManager();
         String[] input = EMPTY_STRING.split(" ");
         System.out.println(input.length);
         assertThrows(BadCommandException.class,
-                () -> reflectionManager.setCommandType(EMPTY_STRING));
-    }
-
-    // Test whether exceptions are thrown for empty string for argument-payload pairs.
-    @Test
-    void setArgumentPayload_emptyCommand_expectException() {
-        ReflectionManager reflectionManager = new ReflectionManager();
-        assertThrows(BadCommandException.class,
-                () -> reflectionManager.setArgumentPayload(EMPTY_STRING));
+                () -> reflectionManager.getCommandFor(EMPTY_STRING));
     }
 
     // Test whether argument_payload pair is properly generated.
