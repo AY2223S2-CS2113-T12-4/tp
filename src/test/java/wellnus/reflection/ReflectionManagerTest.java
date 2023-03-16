@@ -9,16 +9,16 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class ReflectionManagerTest {
     private static final String EMPTY_STRING = "";
+    private static final String EXIT_COMMAND = "exit";
     private static final String GET_COMMAND = "get";
     private static final String INVALID_COMMAND = "test";
+    private static final String RETURN_COMMAND = "return";
 
-    // Test whether exceptions are thrown for invalid command
+    // Test whether exceptions are thrown for an invalid command given by the user
     @Test
     void getCommandFor_invalidCommand_expectException() throws BadCommandException {
         ReflectionManager reflectionManager = new ReflectionManager();
@@ -26,7 +26,7 @@ class ReflectionManagerTest {
                 () -> reflectionManager.getCommandFor(INVALID_COMMAND));
     }
 
-    // Test whether exceptions are thrown for empty string for commandType.
+    // Test whether exceptions are thrown when user gives an empty command
     @Test
     void getCommandFor_emptyString_expectException() {
         ReflectionManager reflectionManager = new ReflectionManager();
@@ -36,14 +36,46 @@ class ReflectionManagerTest {
                 () -> reflectionManager.getCommandFor(EMPTY_STRING));
     }
 
-    // Test whether argument_payload pair is properly generated.
+    /**
+     * Test whether ReflectionManager can recognise the 'exit' command correctly.
+     */
     @Test
-    void setArgumentPayload_singleCommand_expectEmptyPayload() throws BadCommandException {
+    void getCommandFor_exitCommand_success() {
         ReflectionManager reflectionManager = new ReflectionManager();
-        reflectionManager.setArgumentPayload(GET_COMMAND);
-        HashMap<String, String> argumentPayload = reflectionManager.getArgumentPayload();
-        String value = argumentPayload.get(GET_COMMAND);
-        assertEquals(EMPTY_STRING, value);
+        try {
+            Command command = reflectionManager.getCommandFor(EXIT_COMMAND);
+            assertTrue(command instanceof ExitCommand);
+        } catch (BadCommandException badCommandException) {
+            fail();
+        }
+    }
+
+    /**
+     * Test whether ReflectionManager can recognise the 'get' command correctly.
+     */
+    @Test
+    void getCommandFor_getCommand_success() {
+        ReflectionManager reflectionManager = new ReflectionManager();
+        try {
+            Command command = reflectionManager.getCommandFor(GET_COMMAND);
+            assertTrue(command instanceof GetCommand);
+        } catch (BadCommandException badCommandException) {
+            fail();
+        }
+    }
+
+    /**
+     * Test whether ReflectionManager can recognise the 'return' command correctly.
+     */
+    @Test
+    void getCommandFor_returnCommand_success() {
+        ReflectionManager reflectionManager = new ReflectionManager();
+        try {
+            Command command = reflectionManager.getCommandFor(RETURN_COMMAND);
+            assertTrue(command instanceof ReturnCommand);
+        } catch (BadCommandException badCommandException) {
+            fail();
+        }
     }
 
     // Test whether supported commands are properly set up.
