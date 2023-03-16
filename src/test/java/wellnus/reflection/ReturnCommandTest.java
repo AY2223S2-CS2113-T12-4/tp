@@ -6,7 +6,9 @@ import wellnus.exception.BadCommandException;
 
 import java.util.HashMap;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.fail;
+
 
 class ReturnCommandTest {
     private static final String RETURN_COMMAND = "return";

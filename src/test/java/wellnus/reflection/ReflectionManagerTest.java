@@ -4,12 +4,11 @@ import org.junit.jupiter.api.Test;
 import wellnus.command.Command;
 import wellnus.exception.BadCommandException;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 class ReflectionManagerTest {
     private static final String EMPTY_STRING = "";
