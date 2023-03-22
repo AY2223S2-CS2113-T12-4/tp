@@ -1,0 +1,43 @@
+@startuml
+!include style.puml
+skinparam arrowThickness 1.1
+skinparam arrowColor MODEL_COLOR
+skinparam classBackgroundColor MODEL_COLOR
+
+
+Package atomichabit <<Rectangle>>{
+Package command <<Rectangle>> {
+Class AddCommand
+Class HomeCommand
+Class ListCommand
+Class UpdateCommand
+}
+Package feature <<Rectangle>> {
+Class AtomicHabit
+Class AtomicHabitManager
+Class AtomicHabitList
+}
+
+}
+Class TextUi
+Class "{abstract}\nCommand" as Command
+Class "{abstract}\nManager" as Manager
+Command <|-- AddCommand
+Command <|-- HomeCommand
+Command <|-- ListCommand
+Command <|-- UpdateCommand
+Manager <|-- AtomicHabitManager
+AtomicHabitList -> "*" AtomicHabit : contains >
+AtomicHabitManager -right-> "1" AtomicHabitList : create >
+AtomicHabitManager --> AddCommand : execute >
+AtomicHabitManager --> HomeCommand : execute >
+AtomicHabitManager --> ListCommand : execute >
+AtomicHabitManager --> UpdateCommand : execute >
+AddCommand --> "1"AtomicHabitList
+ListCommand --> "1"AtomicHabitList
+UpdateCommand --> "1"AtomicHabitList
+AtomicHabitManager -down-> "1"TextUi
+AddCommand -right-> "1"TextUi
+ListCommand -right-> "1"TextUi
+UpdateCommand -right-> "1"TextUi
+@enduml

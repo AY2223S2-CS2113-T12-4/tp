@@ -1,0 +1,27 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+!include style.puml
+skinparam arrowThickness 1.1
+skinparam arrowColor MODEL_COLOR
+skinparam classBackgroundColor MODEL_COLOR
+hide footbox
+
+Manager -> CommandParser : parseUserInput(userInput)
+activate CommandParser
+CommandParser -> CommandParser : splitIntoCommands(userInput)
+activate CommandParser
+CommandParser --> CommandParser : String[] commands
+deactivate CommandParser
+    loop for each command in commands
+        CommandParser -> CommandParser :getArgumentFromCommand(command)
+        activate CommandParser
+        CommandParser --> CommandParser : argument
+        deactivate CommandParser
+        CommandParser -> CommandParser :getPayloadFromCommand(command)
+        activate CommandParser
+        CommandParser --> CommandParser : payload
+        deactivate CommandParser
+    end
+CommandParser --> Manager: HashMap<String,String> argumentPayload
+deactivate CommandParser
+@enduml
