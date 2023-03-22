@@ -68,6 +68,41 @@ code and the interaction among different classes.<br>
 
 {Describe the design and implementation of the product. Use UML diagrams and short code snippets where applicable.}
 
+### Managers
+![Manager](diagrams/managers.png)<br/>
+The `Manager` abstract class is the superclass for classes responsible for handling user interaction with the app.
+
+Each `Manager` provides `runEventDriver()`, which takes over control of user interaction and provides a particular
+feature(along with all its commands). This fulfils the `Single Responsibility Principle` as every `Manager` is in charge
+of one particular feature and recognises its feature's commands, so it will only change when the feature
+and/or its commands change. This reduces coupling and increases cohesion as changes in one feature will not
+cascade and require amendments to other code(e.g. other `Manager`s), and one feature's commands and input are processed
+together in one class(a particular implementation of `Manager`). This design further fulfils the `Dependency Inversion
+Principle` as the main `WellNus` class doesn't depend on actual implementations of `Manager`, but on the abstract
+`Manager` class and its `runEventDriver()` method that all implementations of `Manager` shall provide(with the same
+expected functionality). Individual `Manager`s are free to provide additional functionality, but `WellNus` shall not
+expect any or depend on them so changes in individual features will not require updating the main `WellNus` class.
+
+In `runEventDriver()`, every `Manager` shall read and process user input using `TextUi` and `CommandParser` and delegate
+the issued command to the corresponding `Command` class. This fulfils the `Single Responsibility Principle`, as a
+particular implementation of `Manager` is not responsible for providing logic to read user input from the commandline,
+nor provide logic for any of the feature's supported commands. Its responsibility is abstract and singular: to recognise
+supported commands and call the corresponding `Command` implementation to execute the user's
+requested action. This ensures that changes in logic for individual commands or reading of user input will not require
+any changes in a particular implementation of `Manager`, as should be expected. A `Manager` class will only change to
+recognise new commands for its feature.
+
+`MainManager` is a unique implementation of `Manager` in that it holds references to every feature's `Manager` instance.
+This is important as `MainManager` then acts as an abstraction barrier for the application: `WellNus` does not know
+what features or commands are supported by the application, and only knows that `MainManager` can recognise supported
+features and commands within its `runEventDriver()` implementation. As such, the main `WellNus` class can be kept
+abstract and simple: call `MainManager.runEventDriver()` to handle user interaction and greet the user. Additionally,
+holding references to every feature's `Manager` allows `MainManager` to preserve the entire state of the running
+application so that a previous session for a feature can be fully restored when the user returns to it, as though
+he/she never left. This makes sense conceptually for a class named `MainManager` and eliminates the need to restore a
+particular `Manager`'s state from storage if the application is still running and the user returns to a particular
+feature.
+
 ### Object Diagram
 
 ## Product scope
