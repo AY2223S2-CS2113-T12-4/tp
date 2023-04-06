@@ -13,9 +13,11 @@ src/main/resources/docs/
 *.iml
 bin/
 
+# Don't put temporary text ui test files in git repo
 /text-ui-test/ACTUAL.TXT
-text-ui-test/EXPECTED-UNIX.TXT
+/text-ui-test/EXPECTED-UNIX.TXT
 
+# Don't put local app data in git repo
 /data/
 
 # Don't put log files in git repo
