@@ -17,3 +17,6 @@ bin/
 text-ui-test/EXPECTED-UNIX.TXT
 
 /data/
+
+# Don't put log files in git repo
+/log/
